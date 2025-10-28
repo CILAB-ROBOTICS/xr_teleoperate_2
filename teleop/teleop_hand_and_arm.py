@@ -22,6 +22,7 @@ from teleop.robot_control.robot_hand_brainco import Brainco_Controller
 from teleimager import ImageClient
 from teleop.utils.episode_writer import EpisodeWriter
 from teleop.utils.ipc import IPC_Server
+from teleop.utils.motion_switcher import MotionSwitcher, LocoClientWrapper
 from sshkeyboard import listen_keyboard, stop_listening
 
 # for simulation
@@ -199,12 +200,14 @@ if __name__ == '__main__':
             from teleop.utils.sim_state_topic import start_sim_state_subscribe
             sim_state_subscriber = start_sim_state_subscribe()
 
-        # controller + motion mode
-        if args.xr_mode == "controller" and args.motion:
-            from unitree_sdk2py.g1.loco.g1_loco_client import LocoClient
-            sport_client = LocoClient()
-            sport_client.SetTimeout(0.0001)
-            sport_client.Init()
+        # motion mode (G1: Regular mode R1+X, not Running mode R2+A)
+        if args.motion:
+            if args.xr_mode == "controller":
+                loco_wrapper = LocoClientWrapper()
+        else:
+            motion_switcher = MotionSwitcher()
+            status, result = motion_switcher.Enter_Debug_Mode()
+            logger_mp.info(f"Enter debug mode: {status}, {result}")
         
         # record + headless / non-headless mode
         if args.record:
@@ -283,9 +286,9 @@ if __name__ == '__main__':
                     STOP = True
                 # command robot to enter damping mode. soft emergency stop function
                 if tele_data.left_ctrl_thumbstick and tele_data.right_ctrl_thumbstick:
-                    sport_client.Damp()
+                    loco_wrapper.Damp()
                 # https://github.com/unitreerobotics/xr_teleoperate/issues/135, control, limit velocity to within 0.3
-                sport_client.Move(-tele_data.left_ctrl_thumbstickValue[1] * 0.3,
+                loco_wrapper.Move(-tele_data.left_ctrl_thumbstickValue[1] * 0.3,
                                   -tele_data.left_ctrl_thumbstickValue[0] * 0.3,
                                   -tele_data.right_ctrl_thumbstickValue[0]* 0.3)
 
@@ -435,6 +438,9 @@ if __name__ == '__main__':
         arm_ctrl.ctrl_dual_arm_go_home()
         img_client.close()
         tv_wrapper.close()
+        if not args.motion:
+            status, result = motion_switcher.Exit_Debug_Mode()
+            logger_mp.info(f"Exit debug mode: {status}, {result}")
 
         if args.ipc:
             ipc_server.stop()
