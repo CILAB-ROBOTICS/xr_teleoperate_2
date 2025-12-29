@@ -80,12 +80,6 @@ class G1_29_ArmController:
         self._gradual_start_time = None
         self._gradual_time = None
 
-        # initialize lowcmd publisher and lowstate subscriber
-        if self.simulation_mode:
-            ChannelFactoryInitialize(1)
-        else:
-            ChannelFactoryInitialize(0)
-
         if self.motion_mode:
             self.lowcmd_publisher = ChannelPublisher(kTopicLowCommand_Motion, hg_LowCmd)
         else:
@@ -368,11 +362,6 @@ class G1_23_ArmController:
         self._gradual_start_time = None
         self._gradual_time = None
 
-        # initialize lowcmd publisher and lowstate subscriber
-        if self.simulation_mode:
-            ChannelFactoryInitialize(1)
-        else:
-            ChannelFactoryInitialize(0)
         
         if self.motion_mode:
             self.lowcmd_publisher = ChannelPublisher(kTopicLowCommand_Motion, hg_LowCmd)
@@ -648,11 +637,6 @@ class H1_2_ArmController:
         self._gradual_start_time = None
         self._gradual_time = None
 
-        # initialize lowcmd publisher and lowstate subscriber
-        if self.simulation_mode:
-            ChannelFactoryInitialize(1)
-        else:
-            ChannelFactoryInitialize(0)
 
         if self.motion_mode:
             self.lowcmd_publisher = ChannelPublisher(kTopicLowCommand_Motion, hg_LowCmd)
@@ -932,11 +916,6 @@ class H1_ArmController:
         self._gradual_start_time = None
         self._gradual_time = None
 
-        # initialize lowcmd publisher and lowstate subscriber
-        if self.simulation_mode:
-            ChannelFactoryInitialize(1)
-        else:
-            ChannelFactoryInitialize(0)
         self.lowcmd_publisher = ChannelPublisher(kTopicLowCommand_Debug, go_LowCmd)
         self.lowcmd_publisher.Init()
         self.lowstate_subscriber = ChannelSubscriber(kTopicLowState, go_LowState)
@@ -1138,7 +1117,9 @@ class H1_JointIndex(IntEnum):
 
 if __name__ == "__main__":
     from robot_arm_ik import G1_29_ArmIK, G1_23_ArmIK, H1_2_ArmIK, H1_ArmIK
-    import pinocchio as pin 
+    import pinocchio as pin
+
+    ChannelFactoryInitialize(1) # 0 for real robot, 1 for simulation
 
     arm_ik = G1_29_ArmIK(Unit_Test = True, Visualization = False)
     arm = G1_29_ArmController(simulation_mode=True)

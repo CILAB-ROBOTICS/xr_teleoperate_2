@@ -29,10 +29,6 @@ class Inspire_Controller_DFX:
         else:
             self.hand_retargeting = HandRetargeting(HandType.INSPIRE_HAND_Unit_Test)
 
-        if self.simulation_mode:
-            ChannelFactoryInitialize(1)
-        else:
-            ChannelFactoryInitialize(0)
 
         # initialize handcmd publisher and handstate subscriber
         self.HandCmb_publisher = ChannelPublisher(kTopicInspireDFXCommand, MotorCmds_)
@@ -178,10 +174,6 @@ class Inspire_Controller_FTP:
         else:
             self.hand_retargeting = HandRetargeting(HandType.INSPIRE_HAND_Unit_Test)
 
-        if self.simulation_mode:
-            ChannelFactoryInitialize(1)
-        else:
-            ChannelFactoryInitialize(0)
 
         # Initialize hand command publishers
         self.LeftHandCmd_publisher = ChannelPublisher(kTopicInspireFTPLeftCommand, inspire_dds.inspire_hand_ctrl)

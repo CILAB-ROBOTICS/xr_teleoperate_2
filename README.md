@@ -36,20 +36,14 @@
 
 # 🔖[Release Note](CHANGELOG.md)
 
-## 🏷️ v1.4
+## 🏷️ v1.5 (2025.12.29)
 
-- The **image server** has been changed to [teleimager](https://github.com/silencht/teleimager). Please refer to the repository README for details.
+- support simulation
+- add CycloneDDS interface name parameter
+- [add caching to speed-up urdf loading](https://github.com/unitreerobotics/xr_teleoperate/commit/6cab654620735bfa347c1cd32a0d8c0c1e6ec343)
+- ...
 
-- Upgraded [televuer](https://github.com/silencht/televuer). Please see the repository README for details.
 
-  > The new versions of [teleimager](https://github.com/silencht/teleimager/commit/ab5018691943433c24af4c9a7f3ea0c9a6fbaf3c) + [televuer](https://github.com/silencht/televuer/releases/tag/v3.0) support transmitting **head camera images via WebRTC**.
-  >  Supports **pass-through**, **ego**, and **immersive** modes.
-
-- Improved the system’s **state machine** information and IPC mode.
-
-- Added support for **Inspire_FTP dexterous hand**.
-
-- …
 
 # 0. 📖 Introduction
 
@@ -212,14 +206,15 @@ build  cert.pem  key.pem  LICENSE  pyproject.toml  README.md  rootCA.key  rootCA
 
 - **Basic control parameters**
 
-|    ⚙️ Parameter    |                        📜 Description                         |                     🔘 Available Options                      |     📌 Default     |
-| :---------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :---------------: |
-|   `--frequency`   |            Set the FPS for recording and control             |                  Any reasonable float value                  |       30.0        |
-|  `--input-mode`   |       Choose XR input mode (how to control the robot)        | `hand` (hand tracking)`controller` (controller tracking) |      `hand`       |
-| `--display-mode`  |  Choose XR display mode (how to view the robot perspective)  | `immersive` (immersive)`ego` (pass-through + small first-person window)`pass-through` (pass-through only) |    `immersive`    |
-|      `--arm`      |      Select the robot arm type (see 0. 📖 Introduction)       |                   `G1_29` `G1_23` `H1_2` `H1`                   |      `G1_29`      |
-|      `--ee`       | Select the end-effector type of the arm (see 0. 📖 Introduction) |       `dex1` `dex3` `inspire_ftp` `inspire_dfx` `brainco`        |       None        |
-| `--img-server-ip` | Set the image server IP address for receiving image streams and configuring WebRTC signaling |                        `IPv4` address                        | `192.168.123.164` |
+|      ⚙️ Parameter      |                        📜 Description                         |                     🔘 Available Options                      |     📌 Default     |
+| :-------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :---------------: |
+|     `--frequency`     |            Set the FPS for recording and control             |                  Any reasonable float value                  |       30.0        |
+|    `--input-mode`     |       Choose XR input mode (how to control the robot)        |   `hand` (hand tracking)`controller` (controller tracking)   |      `hand`       |
+|   `--display-mode`    |  Choose XR display mode (how to view the robot perspective)  | `immersive` (immersive)`ego` (pass-through + small first-person window)`pass-through` (pass-through only) |    `immersive`    |
+|        `--arm`        |      Select the robot arm type (see 0. 📖 Introduction)       |                 `G1_29` `G1_23` `H1_2` `H1`                  |      `G1_29`      |
+|        `--ee`         | Select the end-effector type of the arm (see 0. 📖 Introduction) |     `dex1` `dex3` `inspire_ftp` `inspire_dfx` `brainco`      |       None        |
+|   `--img-server-ip`   | Set the image server IP address for receiving image streams and configuring WebRTC signaling |                        `IPv4` address                        | `192.168.123.164` |
+| `--network-interface` |    Set the network interface for CycloneDDS communication    |                    Network Interface Name                    |      `None`       |
 
 - **Mode switch parameters**
 
@@ -245,7 +240,6 @@ build  cert.pem  key.pem  LICENSE  pyproject.toml  README.md  rootCA.key  rootCA
 
 ## 2.1 📥 Environment Setup
 
-> Since the image service has been upgraded to `teleimager`, the simulation deployment for v1.4 is temporarily unavailable. Please use v1.3 for testing for now.
 
 First, install [unitree_sim_isaaclab](https://github.com/unitreerobotics/unitree_sim_isaaclab). Follow that repo’s README.
 

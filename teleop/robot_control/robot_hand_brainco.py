@@ -32,10 +32,6 @@ class Brainco_Controller:
         else:
             self.hand_retargeting = HandRetargeting(HandType.BRAINCO_HAND_Unit_Test)
 
-        if self.simulation_mode:
-            ChannelFactoryInitialize(1)
-        else:
-            ChannelFactoryInitialize(0)
 
         # initialize handcmd publisher and handstate subscriber
         self.LeftHandCmb_publisher = ChannelPublisher(kTopicbraincoLeftCommand, MotorCmds_)

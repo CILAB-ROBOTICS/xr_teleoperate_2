@@ -63,11 +63,6 @@ class Dex3_1_Controller:
         else:
             self.hand_retargeting = HandRetargeting(HandType.UNITREE_DEX3_Unit_Test)
 
-        if self.simulation_mode:
-            ChannelFactoryInitialize(1)
-        else:
-            ChannelFactoryInitialize(0)
-
         # initialize handcmd publisher and handstate subscriber
         self.LeftHandCmb_publisher = ChannelPublisher(kTopicDex3LeftCommand, HandCmd_)
         self.LeftHandCmb_publisher.Init()
@@ -268,11 +263,6 @@ class Dex1_1_Gripper_Controller:
             self.smooth_filter = WeightedMovingFilter(np.array([0.5, 0.3, 0.2]), 2)
         else:
             self.smooth_filter = None
-
-        if self.simulation_mode:
-            ChannelFactoryInitialize(1)
-        else:
-            ChannelFactoryInitialize(0)
  
         # initialize handcmd publisher and handstate subscriber
         self.LeftGripperCmb_publisher = ChannelPublisher(kTopicGripperLeftCommand, MotorCmds_)
@@ -414,6 +404,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     logger_mp.info(f"args:{args}\n")
 
+    ChannelFactoryInitialize(1) # 0 for real robot, 1 for simulation
+    
     # image client
     img_client = ImageClient(host='127.0.0.1') #host='192.168.123.164'
     if not img_client.has_head_cam():
