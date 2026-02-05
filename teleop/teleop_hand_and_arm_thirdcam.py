@@ -182,11 +182,9 @@ if __name__ == '__main__':
     parser.add_argument('--task-goal', type = str, default = 'pick up cube.', help = 'task goal for recording at json file')
     parser.add_argument('--task-desc', type = str, default = 'task description', help = 'task description for recording at json file')
     parser.add_argument('--task-steps', type = str, default = 'step1: do this; step2: do that;', help = 'task steps for recording at json file')
-    parser.add_argument('--third-webcam-index', type=int, default=-1,
-                        help='Local webcam index for third camera. -1 disables.')
+    parser.add_argument('--third-webcam-index', type=int, default=-1, help='Local webcam index for third camera. -1 disables.')
     parser.add_argument('--third-webcam-width', type=int, default=None)
     parser.add_argument('--third-webcam-height', type=int, default=None)
-
 
     args = parser.parse_args()
     logger_mp.info(f"args: {args}")
@@ -524,11 +522,6 @@ if __name__ == '__main__':
                                 colors[f"color_{3}"] = right_wrist_img
                             else:
                                 logger_mp.warning("Right wrist image is None!")
-                        if camera_config['third_camera']['enable_zmq']:
-                            if third_camera_img is not None:
-                                colors[f"color_{4}"] = third_camera_img
-                            else:
-                                logger_mp.warning("Third camera image is None!")
                     else:
                         if head_img is not None:
                             colors[f"color_{0}"] = head_img
@@ -544,11 +537,6 @@ if __name__ == '__main__':
                                 colors[f"color_{2}"] = right_wrist_img
                             else:
                                 logger_mp.warning("Right wrist image is None!")
-                        if camera_config['third_camera']['enable_zmq']:
-                            if third_camera_img is not None:
-                                colors[f"color_{4}"] = third_camera_img
-                            else:
-                                logger_mp.warning("Third camera image is None!")
                     states = {
                         "left_arm": {                                                                    
                             "qpos":   left_arm_state.tolist(),    # numpy.array -> list
