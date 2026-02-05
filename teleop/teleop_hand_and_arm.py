@@ -271,6 +271,9 @@ if __name__ == '__main__':
             if camera_config['right_wrist_camera']['enable_zmq']:
                 if args.record:
                     right_wrist_img, _ = img_client.get_right_wrist_frame()
+            if camera_config['third_camera']['enable_zmq']:
+                if args.record:
+                    third_camera_img, _ = img_client.get_third_camera_frame()
 
             # record mode
             if args.record and RECORD_TOGGLE:
@@ -401,6 +404,11 @@ if __name__ == '__main__':
                                 colors[f"color_{3}"] = right_wrist_img
                             else:
                                 logger_mp.warning("Right wrist image is None!")
+                        if camera_config['third_camera']['enable_zmq']:
+                            if third_camera_img is not None:
+                                colors[f"color_{3}"] = third_camera_img
+                            else:
+                                logger_mp.warning("Third camera image is None!")
                     else:
                         if head_img is not None:
                             colors[f"color_{0}"] = head_img
@@ -416,6 +424,11 @@ if __name__ == '__main__':
                                 colors[f"color_{2}"] = right_wrist_img
                             else:
                                 logger_mp.warning("Right wrist image is None!")
+                        if camera_config['third_camera']['enable_zmq']:
+                            if third_camera_img is not None:
+                                colors[f"color_{3}"] = third_camera_img
+                            else:
+                                logger_mp.warning("Third camera image is None!")
                     states = {
                         "left_arm": {                                                                    
                             "qpos":   left_arm_state.tolist(),    # numpy.array -> list
